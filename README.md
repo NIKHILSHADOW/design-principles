@@ -226,6 +226,42 @@ Because
 
 To solve this issue we use inheritance.
 
+```mermaid
+
+    classDiagram
+         class Bird{
+            <<abstract>>
+            - Double weight
+            - String color
+            - Double beakSize
+
+            + void fly()*
+        }
+
+        class Eagle{
+            + void fly()
+        }
+
+        class Sparrow{
+            + void fly()
+        }
+
+        class Pegion{
+            + void fly()
+        }
+
+        class Penguin{
+            + void fly()
+        }
+
+        Bird <|-- Sparrow
+        Bird <|-- Pegion
+        Bird <|-- Penguin
+
+        Bird <|-- Eagle
+
+```
+
 ```java
 @Getter
 public abstract class Bird {
