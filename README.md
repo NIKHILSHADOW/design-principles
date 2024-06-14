@@ -226,6 +226,131 @@ Because
 
 To solve this issue we use inheritance.
 
+```java
+@Getter
+public abstract class Bird {
+
+    private Double weight;
+    private String color;
+    private Double beakSize;
+    private Integer age;
+    private Integer avgLifeSpan;
+
+    @Getter
+    public static abstract class BirdBuilder {
+        private Double weight;
+        private String color;
+        private Double beakSize;
+        private Integer age;
+        private Integer avgLifeSpan;
+
+        public BirdBuilder color(String color) {
+            this.color = color;
+            return this;
+        }
+
+        public BirdBuilder weight(Double weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public BirdBuilder beakSize(Double beakSize) {
+            this.beakSize = beakSize;
+            return this;
+        }
+
+        public BirdBuilder age(Integer age) {
+            this.age = age;
+            return this;
+        }
+
+        public BirdBuilder lifeSpan(Integer lifeSpan) {
+            this.avgLifeSpan = lifeSpan;
+            return this;
+        }
+
+        public Bird build(Bird bird) {
+            bird.age = this.age;
+            bird.avgLifeSpan = avgLifeSpan;
+            bird.beakSize = this.beakSize;
+            bird.color = this.color;
+            bird.weight = this.weight;
+            return bird;
+        }
+
+    }
+
+    public abstract void fly();
+
+}
+
+
+```
+
+```java
+
+public class Eagle extends Bird {
+
+    private Eagle() {
+    }
+
+    public static EagleBuilder builder() {
+        return new EagleBuilder();
+    }
+
+    public static class EagleBuilder extends BirdBuilder {
+
+        public EagleBuilder weight(Double weight) {
+            super.weight(weight);
+            return this;
+        }
+
+        public EagleBuilder color(String color) {
+            super.color(color);
+            return this;
+        }
+
+        public EagleBuilder beakSize(Double beakSize) {
+            super.beakSize(beakSize);
+            return this;
+        }
+
+        public EagleBuilder age(Integer age) {
+            super.age(age);
+            return this;
+        }
+
+        public EagleBuilder lifeSpan(Integer lifeSpan) {
+            super.lifeSpan(lifeSpan);
+            return this;
+        }
+
+        public Bird build() {
+            Bird eagle = new Eagle();
+            super.build(eagle);
+
+            return eagle;
+        }
+    }
+
+    @Override
+    public void fly() {
+        System.out.println("Fly like eagle");
+    }
+
+}
+
+
+```
+
+Here it solves the SRP and OCP problems.
+
+But what about the penguin, which can't fly?
+
+We are forcing penguin to implement the fly as we have contract with bird class. which violates LSP.
+
+Then how?
+
 ## KISS
 
 KISS is accronym for
