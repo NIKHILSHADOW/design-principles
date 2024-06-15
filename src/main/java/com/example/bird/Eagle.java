@@ -1,6 +1,8 @@
 package com.example.bird;
 
-public class Eagle extends Bird {
+import com.example.bird.interfaces.Flyable;
+
+public class Eagle extends Bird implements Flyable {
 
     private Eagle() {
     }
@@ -42,11 +44,12 @@ public class Eagle extends Bird {
 
             return eagle;
         }
+
     }
 
     @Override
     public void fly() {
-        System.out.println("Fly like eagle");
+        System.out.println("gliding");
     }
 
 }
