@@ -2,6 +2,8 @@ package com.example;
 
 import com.example.bird.Bird;
 import com.example.bird.Eagle;
+import com.example.bird.FlapBehaviour;
+import com.example.bird.GlidBehaviour;
 import com.example.bird.Penguin;
 import com.example.bird.Sparrow;
 import com.example.bird.interfaces.Flyable;
@@ -18,10 +20,12 @@ public class App {
                 .beakSize(23.0)
                 .color("red")
                 .lifeSpan(12)
+                .flapBehaviour(new FlapBehaviour())
                 .build();
 
         Bird bird2 = Eagle
                 .builder()
+                .glidBehaviour(new GlidBehaviour())
                 .build();
 
         Bird penguin = Penguin
