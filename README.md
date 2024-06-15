@@ -817,9 +817,9 @@ Swimmable <|-- Penguin
 FlapBehaviour --|> FlyBehaviour
 GlidBehaviour --|> FlyBehaviour
 
-FlyBehaviour <|-- Sparrow
-FlyBehaviour <|-- Parrot
-FlyBehaviour <|-- Eagle
+FlyBehaviour *-- Sparrow
+FlyBehaviour *-- Parrot
+FlyBehaviour *-- Eagle
 
 ```
 
