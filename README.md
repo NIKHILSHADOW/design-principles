@@ -22,6 +22,18 @@ What are Design principles?
 
 - Simply, we can say, the principles we need to follow to write maintainable, extensible and scalable code.
 
+- To write maintainable and extensible code, we should understand coupling and cohesion.
+
+- Software principles says code we write should be loose coupled, and highly cohesive.
+
+**High cohesion**
+
+- Similar things should be together(class/package/function)
+
+**Low coupling**
+
+- unrelated things should be seperate(class/package/function)
+
 We generally use Object oriented programming concepts like encapsulation, abstraction, inheritance, polymorphism to write the good software.
 
 ## SOLID Design Principles
@@ -386,6 +398,150 @@ But what about the penguin, which can't fly?
 We are forcing penguin to implement the fly as we have contract with bird class. which violates LSP.
 
 Then how?
+
+---
+
+So let's moving fly method from parent class to child class.
+
+```mermaid
+
+    classDiagram
+
+        class Bird {
+            <<abstract>>
+            - Integer age
+            - Double weight
+            - String color
+        }
+
+        class Sparrow{
+            + void fly()
+        }
+
+        class Parrot{
+            + void fly()
+        }
+
+        class Eagle{
+            + void fly()
+        }
+
+        class Penguin {
+
+        }
+
+        Bird <|-- Sparrow
+        Bird <|-- Parrot
+        Bird <|-- Eagle
+        Bird <|-- Penguin
+
+```
+
+But if there is no contract for fly method, each class might give naming differently and also there is no way to group flying birds together.
+
+So, we comeup with abstract classes
+
+```mermaid
+    classDiagram
+
+        class Bird {
+            <<abstract>>
+            - Integer age
+            - Double weight
+            - String color
+        }
+
+        class FlyableBird {
+            <<abstract>>
+            + void fly()*
+        }
+
+        class NonFlyableBird {
+            <<abstract>>
+        }
+
+        Bird <|-- FlyableBird
+        Bird <|-- NonFlyableBird
+
+        class Sparrow {
+            + void fly()
+        }
+
+        class Eagle {
+            + void fly()
+        }
+
+        class Penguin {
+        }
+
+        class Parrot {
+            + void fly()
+        }
+
+        FlyableBird <|-- Eagle
+        FlyableBird <|-- Parrot
+        FlyableBird <|-- Sparrow
+        NonFlyableBird <|-- Penguin
+
+
+
+```
+
+But Penguin will swim and some other bird will have some other functionality. That results in many permutation classes (Flyable, Swimmable, NonFlyable, SwimmableNonFlyable, SwimmableFlyable)
+
+so it results in too many classes(class Explosion).
+
+so we look forward for interfaces.
+
+```mermaid
+    classDiagram
+
+        class Bird {
+            <<abstract>>
+            - Integer age
+            - Double weight
+            - String color
+        }
+
+        class Flyable {
+            <<interface>>
+            + void fly()*
+        }
+
+        class Swimmable {
+            <<interface>>
+            + void swim()*
+        }
+
+        Swimmable <|-- Penguin
+
+        class Sparrow {
+            + void fly()
+        }
+
+        class Eagle {
+            + void fly()
+        }
+
+
+        class Penguin {
+            + void swim()
+        }
+
+        Bird <|-- Sparrow
+        Bird <|-- Eagle
+
+        Bird <|-- Penguin
+
+        Flyable <|-- Sparrow
+        Flyable <|-- Eagle
+
+
+```
+
+For suppose after flying birds will sleep, even though sleep follows fly we shouldn't put them together, rather create new interface
+
+This is what Interface segregation says, keep interfaces as small as possible, such that it follows high cohesion and low coupling.
 
 ## KISS
 
