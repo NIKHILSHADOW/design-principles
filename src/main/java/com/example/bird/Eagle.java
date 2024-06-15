@@ -1,8 +1,11 @@
 package com.example.bird;
 
+import com.example.bird.interfaces.FlyBehaviour;
 import com.example.bird.interfaces.Flyable;
 
 public class Eagle extends Bird implements Flyable {
+
+    FlyBehaviour flyBehaviour;
 
     private Eagle() {
     }
@@ -12,6 +15,8 @@ public class Eagle extends Bird implements Flyable {
     }
 
     public static class EagleBuilder extends BirdBuilder {
+
+        private FlyBehaviour flyBehaviour;
 
         public EagleBuilder weight(Double weight) {
             super.weight(weight);
@@ -38,9 +43,16 @@ public class Eagle extends Bird implements Flyable {
             return this;
         }
 
+        public EagleBuilder flyBehaviour(FlyBehaviour flyBehaviour) {
+            this.flyBehaviour = flyBehaviour;
+            return this;
+        }
+
         public Bird build() {
             Bird eagle = new Eagle();
             super.build(eagle);
+
+            ((Eagle) eagle).flyBehaviour = this.flyBehaviour;
 
             return eagle;
         }
@@ -49,7 +61,7 @@ public class Eagle extends Bird implements Flyable {
 
     @Override
     public void fly() {
-        System.out.println("gliding");
+        flyBehaviour.iFly();
     }
 
 }

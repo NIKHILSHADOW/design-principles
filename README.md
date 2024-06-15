@@ -614,7 +614,286 @@ public class Sparrow extends Bird implements Flyable {
 
 The above follows LSP, But there is code duplication, for suppose parrot and sparrow fly same way.
 
-How to solve code redundncy issue.
+How to solve code redundancy issue.
+
+Here comes composition
+
+```mermaid
+    classDiagram
+class Bird {
+    <<abstract>>
+    - Integer age
+    - Double weight
+    - String color
+}
+
+class Flyable {
+    <<interface>>
+    + void fly()*
+}
+
+class Swimmable {
+    <<interface>>
+    + void fly()*
+}
+
+
+class FlapBehaviour {
+    + void doFly()
+}
+
+class GlidBehaviour{
+    + void iFly()
+}
+
+class Sparrow {
+    FlapBehaviour flapBehaviour
+    +void fly()
+}
+
+class Eagle {
+    GlidBehaviour glidBehaviour
+
+    +void fly()
+}
+
+class Parrot {
+    FlapBehaviour flappingBehviour
+    + void fly()
+}
+
+class Penguin {
+    + void swim()
+}
+
+Bird <|-- Sparrow
+Bird <|-- Eagle
+Bird <|-- Parrot
+
+Flyable <|-- Sparrow
+Flyable <|-- Eagle
+Flyable <|-- Parrot
+
+Swimmable <|-- Penguin
+
+FlapBehaviour <|-- Sparrow
+FlapBehaviour <|-- Parrot
+GlidBehaviour <|-- Eagle
+
+```
+
+```java
+public class Sparrow extends Bird implements Flyable {
+
+    private FlapBehaviour flapBehaviour;
+
+    private Sparrow() {
+    }
+
+    public static SparrowBuilder builder() {
+        return new SparrowBuilder();
+    }
+
+    public static class SparrowBuilder extends BirdBuilder {
+
+        Bird sparrow;
+        FlapBehaviour flapBehaviour;
+
+        public SparrowBuilder color(String color) {
+            super.color(color);
+            return this;
+        }
+
+        public SparrowBuilder weight(Double weight) {
+            super.weight(weight);
+            return this;
+        }
+
+        public SparrowBuilder beakSize(Double beakSize) {
+            super.beakSize(beakSize);
+            return this;
+        }
+
+        public SparrowBuilder age(Integer age) {
+            super.age(age);
+            return this;
+        }
+
+        public SparrowBuilder lifeSpan(Integer lifeSpan) {
+            super.lifeSpan(lifeSpan);
+            return this;
+        }
+
+        public SparrowBuilder flapBehaviour(FlapBehaviour flapBehaviour) {
+            this.flapBehaviour = flapBehaviour;
+            return this;
+        }
+
+        public Bird build() {
+            sparrow = new Sparrow();
+            ((Sparrow) sparrow).flapBehaviour = this.flapBehaviour;
+            super.build(sparrow);
+            return sparrow;
+        }
+    }
+
+    @Override
+    public void fly() {
+        flapBehaviour.iFly();
+    }
+
+}
+```
+
+But there is no way, we can change the method from flap to glid at run time.
+
+This is Dependency inversion principle, which says concrete classes shouldn't depend on each other rather depend on abstraction.
+
+To solve this we introduce interface
+
+```mermaid
+    classDiagram
+class Bird {
+    <<abstract>>
+    - Integer age
+    - Double weight
+    - String color
+}
+
+class Flyable {
+    <<interface>>
+    + void fly()*
+}
+
+class Swimmable {
+    <<interface>>
+    + void fly()*
+}
+
+class FlyBehaviour {
+    <<abstract>>
+    + void iFly()*
+}
+
+class FlapBehaviour {
+    + void iFly()
+}
+
+class GlidBehaviour{
+    + void iFly()
+}
+
+class Sparrow {
+    FlyBehaviour flyBehaviour
+    +void fly()
+}
+
+class Eagle {
+    FlyBehaviour flyBehaviour
+
+    +void fly()
+}
+
+class Parrot {
+    FlyBehaviour flyBehviour
+    + void fly()
+}
+
+class Penguin {
+    + void swim()
+}
+
+Sparrow --|> Bird
+Eagle --|> Bird
+Parrot --|> Bird
+Penguin --|> Bird
+
+Sparrow --|> Flyable
+Eagle --|> Flyable
+Parrot --|> Flyable
+
+Swimmable <|-- Penguin
+
+FlapBehaviour --|> FlyBehaviour
+GlidBehaviour --|> FlyBehaviour
+
+FlyBehaviour <|-- Sparrow
+FlyBehaviour <|-- Parrot
+FlyBehaviour <|-- Eagle
+
+```
+
+```java
+
+package com.example.bird;
+
+import com.example.bird.interfaces.FlyBehaviour;
+import com.example.bird.interfaces.Flyable;
+
+public class Eagle extends Bird implements Flyable {
+
+    FlyBehaviour flyBehaviour;
+
+    private Eagle() {
+    }
+
+    public static EagleBuilder builder() {
+        return new EagleBuilder();
+    }
+
+    public static class EagleBuilder extends BirdBuilder {
+
+        private FlyBehaviour flyBehaviour;
+
+        public EagleBuilder weight(Double weight) {
+            super.weight(weight);
+            return this;
+        }
+
+        public EagleBuilder color(String color) {
+            super.color(color);
+            return this;
+        }
+
+        public EagleBuilder beakSize(Double beakSize) {
+            super.beakSize(beakSize);
+            return this;
+        }
+
+        public EagleBuilder age(Integer age) {
+            super.age(age);
+            return this;
+        }
+
+        public EagleBuilder lifeSpan(Integer lifeSpan) {
+            super.lifeSpan(lifeSpan);
+            return this;
+        }
+
+        public EagleBuilder flyBehaviour(FlyBehaviour flyBehaviour) {
+            this.flyBehaviour = flyBehaviour;
+            return this;
+        }
+
+        public Bird build() {
+            Bird eagle = new Eagle();
+            super.build(eagle);
+
+            ((Eagle) eagle).flyBehaviour = this.flyBehaviour;
+
+            return eagle;
+        }
+
+    }
+
+    @Override
+    public void fly() {
+        flyBehaviour.iFly();
+    }
+
+}
+
+```
 
 ## KISS
 
