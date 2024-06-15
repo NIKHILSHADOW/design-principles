@@ -543,6 +543,79 @@ For suppose after flying birds will sleep, even though sleep follows fly we shou
 
 This is what Interface segregation says, keep interfaces as small as possible, such that it follows high cohesion and low coupling.
 
+```java
+public interface Flyable {
+    public void fly();
+}
+```
+
+```java
+
+public interface Swimmable {
+    public void swim();
+}
+
+```
+
+```java
+public class Sparrow extends Bird implements Flyable {
+
+    private Sparrow() {
+    }
+
+    public static SparrowBuilder builder() {
+        return new SparrowBuilder();
+    }
+
+    public static class SparrowBuilder extends BirdBuilder {
+
+        Bird sparrow;
+
+        public SparrowBuilder color(String color) {
+            super.color(color);
+            return this;
+        }
+
+        public SparrowBuilder weight(Double weight) {
+            super.weight(weight);
+            return this;
+        }
+
+        public SparrowBuilder beakSize(Double beakSize) {
+            super.beakSize(beakSize);
+            return this;
+        }
+
+        public SparrowBuilder age(Integer age) {
+            super.age(age);
+            return this;
+        }
+
+        public SparrowBuilder lifeSpan(Integer lifeSpan) {
+            super.lifeSpan(lifeSpan);
+            return this;
+        }
+
+        public Bird build() {
+            sparrow = new Sparrow();
+            super.build(sparrow);
+            return sparrow;
+        }
+    }
+
+    @Override
+    public void fly() {
+        System.out.println("flapping ");
+    }
+
+}
+
+```
+
+The above follows LSP, But there is code duplication, for suppose parrot and sparrow fly same way.
+
+How to solve code redundncy issue.
+
 ## KISS
 
 KISS is accronym for
