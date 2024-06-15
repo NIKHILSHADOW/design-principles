@@ -1,10 +1,11 @@
 package com.example.bird;
 
+import com.example.bird.interfaces.FlyBehaviour;
 import com.example.bird.interfaces.Flyable;
 
 public class Sparrow extends Bird implements Flyable {
 
-    private FlapBehaviour flapBehaviour;
+    private FlyBehaviour flyBehaviour;
 
     private Sparrow() {
     }
@@ -16,7 +17,7 @@ public class Sparrow extends Bird implements Flyable {
     public static class SparrowBuilder extends BirdBuilder {
 
         Bird sparrow;
-        FlapBehaviour flapBehaviour;
+        FlyBehaviour flyBehaviour;
 
         public SparrowBuilder color(String color) {
             super.color(color);
@@ -43,14 +44,14 @@ public class Sparrow extends Bird implements Flyable {
             return this;
         }
 
-        public SparrowBuilder flapBehaviour(FlapBehaviour flapBehaviour) {
-            this.flapBehaviour = flapBehaviour;
+        public SparrowBuilder flyBehaviour(FlyBehaviour flyBehaviour) {
+            this.flyBehaviour = flyBehaviour;
             return this;
         }
 
         public Bird build() {
             sparrow = new Sparrow();
-            ((Sparrow) sparrow).flapBehaviour = this.flapBehaviour;
+            ((Sparrow) sparrow).flyBehaviour = this.flyBehaviour;
             super.build(sparrow);
             return sparrow;
         }
@@ -58,7 +59,7 @@ public class Sparrow extends Bird implements Flyable {
 
     @Override
     public void fly() {
-        flapBehaviour.iFly();
+        flyBehaviour.iFly();
     }
 
 }

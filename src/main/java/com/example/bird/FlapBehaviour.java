@@ -1,7 +1,12 @@
 package com.example.bird;
 
-public class FlapBehaviour {
+import com.example.bird.interfaces.FlyBehaviour;
+
+public class FlapBehaviour implements FlyBehaviour {
+
+    @Override
     public void iFly() {
-        System.out.println("flap");
+        System.out.println("Flap");
     }
+
 }

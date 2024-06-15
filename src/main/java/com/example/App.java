@@ -20,12 +20,12 @@ public class App {
                 .beakSize(23.0)
                 .color("red")
                 .lifeSpan(12)
-                .flapBehaviour(new FlapBehaviour())
+                .flyBehaviour(new FlapBehaviour())
                 .build();
 
         Bird bird2 = Eagle
                 .builder()
-                .glidBehaviour(new GlidBehaviour())
+                .flyBehaviour(new GlidBehaviour())
                 .build();
 
         Bird penguin = Penguin
